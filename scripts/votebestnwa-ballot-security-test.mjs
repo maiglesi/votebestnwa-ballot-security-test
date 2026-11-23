@@ -273,8 +273,8 @@ async function executeAttempt(browser, options, runNumber) {
 
     await clickLabeledControl(page, reviewBallot, options.timeoutMs);
     await throwIfBotCheckPresent(page);
-    await waitForVisibleText(page, 'Cast Ballot', options.timeoutMs);
-    await clickLabeledControl(page, 'Cast Ballot', options.timeoutMs);
+    await waitForVisibleText(page, 'Submit Ballot', options.timeoutMs);
+    await clickLabeledControl(page, 'Submit Ballot', options.timeoutMs);
     const status = await awaitSubmissionResult(page, options.timeoutMs);
     const screenshot = await saveScreenshot(page, options.artifactsDir, runNumber, status);
     return { runNumber, status, screenshot };
