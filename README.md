@@ -37,6 +37,12 @@ Add a delay between fixed attempts:
 npm run ballot-security-test -- --live --runs 10 --pause-seconds 2
 ```
 
+By default, the runner stops after a second accepted submission and returns a failure code. For an authorized test that must continue collecting accepted attempts, add `--continue-after-acceptance`:
+
+```sh
+npm run ballot-security-test -- --live --runs 10 --pause-seconds 2 --continue-after-acceptance
+```
+
 Run continuously every 10 seconds until you press `Ctrl+C`. The runner finishes its active attempt and writes `report.json` before exiting:
 
 ```sh

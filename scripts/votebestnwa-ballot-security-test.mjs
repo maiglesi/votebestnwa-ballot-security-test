@@ -26,6 +26,7 @@ const TEST_BALLOT = [
 
 const DEFAULTS = {
   artifactsDir: 'artifacts/votebestnwa-ballot-security-test',
+  continueAfterAcceptance: false,
   live: false,
   loop: false,
   pauseSeconds: 0,
@@ -45,6 +46,8 @@ The test ballot contains only the authorized test entries:
 Options:
   --runs <number>          Number of fresh-browser test attempts (default: 1)
   --live                   Submit the ballot. Without this, the runner stops before Cast Ballot.
+  --continue-after-acceptance
+                           Continue after repeat submissions are accepted (authorized tests only).
   --loop                   Repeat until interrupted with Ctrl+C (requires --pause-seconds).
   --pause-seconds <number> Delay between runs in seconds (default: 0)
   --timeout-ms <number>    Per-step timeout in milliseconds (default: 30000)
@@ -80,6 +83,9 @@ function parseArgs(argumentsList) {
         break;
       case '--live':
         options.live = true;
+        break;
+      case '--continue-after-acceptance':
+        options.continueAfterAcceptance = true;
         break;
       case '--loop':
         options.loop = true;
@@ -321,8 +327,11 @@ async function main() {
       if (result.status === 'accepted' && results.some((entry) => entry.status === 'accepted')) {
         const acceptedCount = results.filter((entry) => entry.status === 'accepted').length;
         if (acceptedCount > 1) {
-          console.error('Security failure: a second ballot submission was accepted. Stopping further attempts.');
-          break;
+          console.error('Security failure: a second ballot submission was accepted.');
+          if (!options.continueAfterAcceptance) {
+            console.error('Stopping further attempts. Use --continue-after-acceptance only for authorized testing.');
+            break;
+          }
         }
       }
 
